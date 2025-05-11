@@ -1,17 +1,14 @@
 import React from 'react';
+import DashboardLayout from './components/DashboardLayout';
 import ClienteForm from './components/ClienteForm';
 import PedidoForm from './components/PedidoForm';
+import ListaClientes from './components/ListaClientes';
+import ListaPedidos from './components/ListaPedidos';
 
 function App() {
-  return (
-    <div>
-      <h1>Enmarcaciones Dalí</h1>
-      <h2>Registrar Cliente</h2>
-      <ClienteForm />
-      <h2>Registrar Pedido</h2>
-      <PedidoForm />
-    </div>
-  );
+  return <DashboardLayout />;
 }
+
+
 
 export default App;
