@@ -6,13 +6,20 @@ function ListaClientes() {
   useEffect(() => {
     fetch('http://localhost:5000/clientes')
       .then(res => res.json())
-      .then(data => setClientes(data))
+      .then(data => {
+        if (Array.isArray(data)) {
+          setClientes(data);
+        } else if (Array.isArray(data.data)) {
+          setClientes(data.data); // ✅ aquí tomamos el array correcto
+        } else {
+          console.error('Formato inesperado:', data);
+        }
+      })
       .catch(err => console.error('Error al cargar clientes:', err));
   }, []);
 
   return (
     <div>
-      
       <table border="1" cellPadding="5">
         <thead>
           <tr>

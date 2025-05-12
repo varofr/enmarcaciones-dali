@@ -11,10 +11,10 @@ app.use(express.json());
 
 // Conexión a PostgreSQL
 const pool = new Pool({
-  user: 'postgres', // ajusta si usas otro usuario
+  user: 'postgres', 
   host: 'localhost',
   database: 'enmarcaciones_dali',
-  password: 'rrrd0f2l', // ajusta si cambiaste la contraseña
+  password: 'rrrd0f2l', 
   port: 5432,
 });
 

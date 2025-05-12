@@ -7,6 +7,16 @@ import ListaPedidos from './components/ListaPedidos';
 
 function App() {
   return <DashboardLayout />;
+
+  /*
+  
+  return <React/>;
+  return <ClienteForm />;
+  return <PedidoForm/>;
+  return <ListaClientes/>;
+  return <ListaPedidos/>;
+  
+  */
 }
 
 

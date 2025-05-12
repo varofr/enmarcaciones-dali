@@ -6,13 +6,20 @@ function ListaPedidos() {
   useEffect(() => {
     fetch('http://localhost:5000/pedidos')
       .then(res => res.json())
-      .then(data => setPedidos(data))
+      .then(data => {
+        if (Array.isArray(data)) {
+          setPedidos(data);
+        } else if (Array.isArray(data.data)) {
+          setPedidos(data.data); // ✅ acceder al array real
+        } else {
+          console.error('Formato inesperado en /pedidos:', data);
+        }
+      })
       .catch(err => console.error('Error al cargar pedidos:', err));
   }, []);
 
   return (
     <div>
-      
       <table border="1" cellPadding="5">
         <thead>
           <tr>
