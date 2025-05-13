@@ -10,7 +10,7 @@ function ListaPedidos() {
         if (Array.isArray(data)) {
           setPedidos(data);
         } else if (Array.isArray(data.data)) {
-          setPedidos(data.data); // ✅ acceder al array real
+          setPedidos(data.data); 
         } else {
           console.error('Formato inesperado en /pedidos:', data);
         }

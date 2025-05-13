@@ -10,7 +10,7 @@ function ListaClientes() {
         if (Array.isArray(data)) {
           setClientes(data);
         } else if (Array.isArray(data.data)) {
-          setClientes(data.data); // ✅ aquí tomamos el array correcto
+          setClientes(data.data); 
         } else {
           console.error('Formato inesperado:', data);
         }

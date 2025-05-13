@@ -36,7 +36,7 @@ app.post('/clientes', async (req, res) => {
 // RUTA: Obtener todos los clientes
 app.get('/clientes', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM clientes ORDER BY id DESC');
+    const result = await pool.query('SELECT * FROM clientes ORDER BY id ASC');
     res.json(result.rows);
   } catch (err) {
     console.error(err);

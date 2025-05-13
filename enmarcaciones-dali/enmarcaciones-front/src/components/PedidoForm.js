@@ -18,7 +18,7 @@ function PedidoForm() {
     precio_total: 0
   });
 
-  // ✅ Carga clientes desde el backend
+  // Carga clientes desde el backend
   useEffect(() => {
     fetch('http://localhost:5000/clientes')
       .then(res => res.json())
@@ -26,7 +26,7 @@ function PedidoForm() {
         if (Array.isArray(data)) {
           setClientes(data);
         } else if (Array.isArray(data.data)) {
-          setClientes(data.data); // ← corrección clave aquí
+          setClientes(data.data); 
         } else {
           console.error('Respuesta inesperada:', data);
         }
@@ -34,7 +34,7 @@ function PedidoForm() {
       .catch(err => console.error('Error al cargar clientes:', err));
   }, []);
 
-  // ✅ Calcula precio automático
+  // Calcula precio automático
   const calcularPrecio = (alto, ancho, tipo_moldura) => {
     const moldura = molduras.find((m) => m.tipo === tipo_moldura);
     if (!moldura) return 0;
@@ -42,7 +42,7 @@ function PedidoForm() {
     return perimetro * moldura.precio;
   };
 
-  // ✅ Maneja los cambios en el formulario
+  // Maneja los cambios en el formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
     const updatedForm = { ...formData, [name]: value };
@@ -56,7 +56,7 @@ function PedidoForm() {
     setFormData(updatedForm);
   };
 
-  // ✅ Envía el pedido al backend
+  // Envía el pedido al backend
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
