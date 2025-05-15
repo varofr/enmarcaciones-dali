@@ -4,13 +4,13 @@ function ListaClientes() {
   const [clientes, setClientes] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/clientes')
+    fetch('http://localhost:5000/api/clientes')
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {
           setClientes(data);
         } else if (Array.isArray(data.data)) {
-          setClientes(data.data); 
+          setClientes(data.data);
         } else {
           console.error('Formato inesperado:', data);
         }
@@ -20,6 +20,7 @@ function ListaClientes() {
 
   return (
     <div>
+      <h2>Clientes Registrados</h2>
       <table border="1" cellPadding="5">
         <thead>
           <tr>
@@ -33,7 +34,7 @@ function ListaClientes() {
           </tr>
         </thead>
         <tbody>
-          {clientes.map(cliente => (
+          {clientes.map((cliente) => (
             <tr key={cliente.id}>
               <td>{cliente.id}</td>
               <td>{cliente.nombre}</td>

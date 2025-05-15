@@ -44,15 +44,13 @@ function DashboardLayout() {
         <div className="dashboard_sidebar_menus">
           <ul className="dashboard_menu_list">
             <li className={activeView === 'pedidos' ? 'menuActive' : ''}>
-              <a href="/" onClick={(e) => { e.preventDefault(); setActiveView('pedidos'); }}>
-
+              <a href="#" onClick={(e) => { e.preventDefault(); setActiveView('pedidos'); }}>
                 <i className="fa-solid fa-person-chalkboard"></i>
                 <span className="menuText">Gestionar Pedidos</span>
               </a>
             </li>
             <li className={activeView === 'clientes' ? 'menuActive' : ''}>
-             <a href="/" onClick={(e) => { e.preventDefault(); setActiveView('clientes'); }}>
-
+              <a href="#" onClick={(e) => { e.preventDefault(); setActiveView('clientes'); }}>
                 <i className="fa-solid fa-address-book"></i>
                 <span className="menuText">Clientes</span>
               </a>

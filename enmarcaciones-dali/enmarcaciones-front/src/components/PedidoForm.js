@@ -20,7 +20,7 @@ function PedidoForm() {
 
   // Carga clientes desde el backend
   useEffect(() => {
-    fetch('http://localhost:5000/clientes')
+    fetch('http://localhost:5000/api/clientes')
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {
@@ -36,11 +36,19 @@ function PedidoForm() {
 
   // Calcula precio automático
   const calcularPrecio = (alto, ancho, tipo_moldura) => {
-    const moldura = molduras.find((m) => m.tipo === tipo_moldura);
-    if (!moldura) return 0;
-    const perimetro = 2 * (parseFloat(alto || 0) + parseFloat(ancho || 0));
-    return perimetro * moldura.precio;
-  };
+  const moldura = molduras.find((m) => m.tipo === tipo_moldura);
+  if (!moldura) return 0;
+
+  const perimetroCM = 2 * (parseFloat(alto || 0) + parseFloat(ancho || 0));
+  const perimetroM = perimetroCM / 100;
+
+  const precioMoldura = perimetroM * moldura.precio;
+  const costoFijo = 2000; // por corte, ensamblado, etc.
+
+  return Math.round(precioMoldura + costoFijo);
+};
+
+
 
   // Maneja los cambios en el formulario
   const handleChange = (e) => {
@@ -60,7 +68,7 @@ function PedidoForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/pedidos', {
+      const res = await fetch('http://localhost:5000/api/pedidos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
