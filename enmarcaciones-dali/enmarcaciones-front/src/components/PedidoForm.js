@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../css/PedidoForm.css';
 
-
 const molduras = [
   { tipo: 'Dorada', precio: 1200, imagen: '/Images/Molduras/dorada.jpg' },
   { tipo: 'Negra', precio: 1400, imagen: '/Images/Molduras/negra.jpg' },
@@ -9,7 +8,7 @@ const molduras = [
   { tipo: 'Plateada', precio: 1300, imagen: '/Images/Molduras/plateada.jpg' }
 ];
 
-function PedidoForm() {
+function PedidoForm({ onPedidoCreado }) {
   const [clientes, setClientes] = useState([]);
   const [formData, setFormData] = useState({
     cliente_id: '',
@@ -42,6 +41,7 @@ function PedidoForm() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     const updatedForm = { ...formData, [name]: value };
+
     if (name === 'alto' || name === 'ancho' || name === 'tipo_moldura') {
       updatedForm.precio_total = calcularPrecio(
         updatedForm.alto,
@@ -49,6 +49,7 @@ function PedidoForm() {
         updatedForm.tipo_moldura
       );
     }
+
     setFormData(updatedForm);
   };
 
@@ -73,6 +74,14 @@ function PedidoForm() {
       const result = await res.json();
       if (res.ok) {
         alert('Pedido registrado con éxito');
+        if (typeof onPedidoCreado === 'function') onPedidoCreado();
+        setFormData({
+          cliente_id: '',
+          alto: '',
+          ancho: '',
+          tipo_moldura: '',
+          precio_total: 0
+        });
       } else {
         alert('Error al registrar pedido: ' + result.error);
       }
@@ -84,7 +93,7 @@ function PedidoForm() {
 
   return (
     <form onSubmit={handleSubmit} className="pedido-form">
-      <select name="cliente_id" onChange={handleChange} required>
+      <select name="cliente_id" value={formData.cliente_id} onChange={handleChange} required>
         <option value="">Seleccione un cliente</option>
         {clientes.map(cliente => (
           <option key={cliente.id} value={cliente.id}>
@@ -93,8 +102,22 @@ function PedidoForm() {
         ))}
       </select>
 
-      <input name="alto" type="number" placeholder="Alto (cm)" onChange={handleChange} required />
-      <input name="ancho" type="number" placeholder="Ancho (cm)" onChange={handleChange} required />
+      <input
+        name="alto"
+        type="number"
+        placeholder="Alto (cm)"
+        value={formData.alto}
+        onChange={handleChange}
+        required
+      />
+      <input
+        name="ancho"
+        type="number"
+        placeholder="Ancho (cm)"
+        value={formData.ancho}
+        onChange={handleChange}
+        required
+      />
 
       <div className="molduras-grid">
         {molduras.map((m) => (

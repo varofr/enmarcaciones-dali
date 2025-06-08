@@ -105,4 +105,90 @@ img {
 }
 .menuText {
   display: inline-block;
+} 
+
+/* -------------------------------------------- */
+
+.tabla-clientes {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+.tabla-clientes th, .tabla-clientes td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.tabla-clientes th {
+  background-color: #f8f8f8;
+  font-weight: bold;
+  color: #333;
+}
+
+.tabla-clientes tr:hover {
+  background-color: #f1f1f1;
+}
+
+.estado-btns button {
+  margin: 2px;
+  padding: 6px 10px;
+  border: none;
+  background-color: #1976d2;
+  color: rgb(255, 255, 255);
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.estado-btns button:hover {
+  background-color: #135ca1;
+}
+
+/* Estilos extendidos para .tabla general y .tabla-pedidos */
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  font-size: 15px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.tabla th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  text-align: left;
+  padding: 14px 20px;
+  border-bottom: 2px solid #ccc;
+}
+
+.tabla td {
+  padding: 14px 20px;
+  border-bottom: 1px solid #bbb;
+}
+
+.tabla td:not(:last-child),
+.tabla th:not(:last-child) {
+  border-right: 1px solid #e2e2e2;
+}
+
+.tabla tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.tabla tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+.tabla th.estado-columna,
+.tabla td.estado-columna {
+  min-width: 130px;
+}
+
+.tabla th.acciones-columna,
+.tabla td.acciones-columna {
+  min-width: 200px;
 }

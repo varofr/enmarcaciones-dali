@@ -30,3 +30,25 @@
   font-weight: bold;
   margin: 1rem 0;
 }
+
+.molduras-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+  margin: 1rem 0;
+}
+
+.moldura-card {
+  border: 2px solid transparent;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: border 0.3s ease;
+  padding: 8px;
+}
+
+.moldura-card:hover,
+.moldura-card.selected {
+  border-color: #007bff;
+  background-color: #f0f8ff;
+}

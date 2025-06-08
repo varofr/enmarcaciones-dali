@@ -15,6 +15,9 @@ app.use('/api/clientes', clienteRoutes);
 const pedidoRoutes = require('./routes/pedidoRoutes');
 app.use('/api/pedidos', pedidoRoutes);
 
+const inventarioRoutes = require('./routes/inventarioRoutes');
+app.use('/api/inventario', inventarioRoutes);
+
 
 // Conexión con Sequelize
 const { sequelize } = require('./models');

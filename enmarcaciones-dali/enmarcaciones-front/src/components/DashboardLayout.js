@@ -4,10 +4,21 @@ import ClienteForm from './ClienteForm';
 import ListaClientes from './ListaClientes';
 import PedidoForm from './PedidoForm';
 import ListaPedidos from './ListaPedidos';
-
+import InventarioForm from './InventarioForm';
+import ListaInventario from './ListaInventario';
 
 function DashboardLayout() {
   const [activeView, setActiveView] = useState('clientes');
+
+  const handleNuevoItem = (item) => {
+    fetch('http://localhost:5000/api/inventario', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(item),
+    }).then(() => {
+      console.log('Ítem guardado');
+    });
+  };
 
   const renderContent = () => {
     switch (activeView) {
@@ -29,7 +40,15 @@ function DashboardLayout() {
             <ListaPedidos />
           </>
         );
-      
+      case 'inventario':
+        return (
+          <>
+            <h2>Agregar al Inventario</h2>
+            <InventarioForm onSubmit={handleNuevoItem} />
+            <h2>Inventario Actual</h2>
+            <ListaInventario />
+          </>
+        );
       default:
         return <p>Selecciona una opción del menú</p>;
     }
@@ -45,18 +64,24 @@ function DashboardLayout() {
         </div>
         <div className="dashboard_sidebar_menus">
           <ul className="dashboard_menu_list">
-           <li className={activeView === 'clientes' ? 'menuActive' : ''}>
-                <a href="#" onClick={(e) => { e.preventDefault(); setActiveView('clientes'); }}>
-                  <i className="fa-solid fa-address-book"></i>
-                  <span className="menuText">Clientes</span>
-                </a>
-              </li>
-              <li className={activeView === 'pedidos' ? 'menuActive' : ''}>
-                <a href="#" onClick={(e) => { e.preventDefault(); setActiveView('pedidos'); }}>
-                  <i className="fa-solid fa-person-chalkboard"></i>
-                  <span className="menuText">Gestionar Pedidos</span>
-                </a>
-              </li>
+            <li className={activeView === 'clientes' ? 'menuActive' : ''}>
+              <a href="#" onClick={(e) => { e.preventDefault(); setActiveView('clientes'); }}>
+                <i className="fa-solid fa-address-book"></i>
+                <span className="menuText">Clientes</span>
+              </a>
+            </li>
+            <li className={activeView === 'pedidos' ? 'menuActive' : ''}>
+              <a href="#" onClick={(e) => { e.preventDefault(); setActiveView('pedidos'); }}>
+                <i className="fa-solid fa-person-chalkboard"></i>
+                <span className="menuText">Gestionar Pedidos</span>
+              </a>
+            </li>
+            <li className={activeView === 'inventario' ? 'menuActive' : ''}>
+              <a href="#" onClick={(e) => { e.preventDefault(); setActiveView('inventario'); }}>
+                <i className="fa-solid fa-boxes-stacked"></i>
+                <span className="menuText">Inventario</span>
+              </a>
+            </li>
           </ul>
         </div>
       </div>

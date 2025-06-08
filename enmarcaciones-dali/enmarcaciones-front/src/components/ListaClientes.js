@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import '../css/dashboard.css'; // asegúrate de tener las clases ahí
 
 function ListaClientes() {
   const [clientes, setClientes] = useState([]);
@@ -19,34 +20,37 @@ function ListaClientes() {
   }, []);
 
   return (
-    <div>
-      
-      <table border="1" cellPadding="5">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>RUT</th>
-            <th>Tipo</th>
-            <th>Dirección</th>
-            <th>Teléfono</th>
-            <th>Email</th>
-          </tr>
-        </thead>
-        <tbody>
-          {clientes.map((cliente) => (
-            <tr key={cliente.id}>
-              <td>{cliente.id}</td>
-              <td>{cliente.nombre}</td>
-              <td>{cliente.rut}</td>
-              <td>{cliente.tipo_cliente}</td>
-              <td>{cliente.direccion}</td>
-              <td>{cliente.telefono}</td>
-              <td>{cliente.email}</td>
+    <div className="lista-clientes-container">
+      {clientes.length === 0 ? (
+        <p>No hay clientes registrados.</p>
+      ) : (
+        <table className="tabla tabla-clientes">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>RUT</th>
+              <th>Tipo</th>
+              <th>Dirección</th>
+              <th>Teléfono</th>
+              <th>Email</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {clientes.map((cliente) => (
+              <tr key={cliente.id}>
+                <td>{cliente.id}</td>
+                <td>{cliente.nombre}</td>
+                <td>{cliente.rut}</td>
+                <td>{cliente.tipo_cliente}</td>
+                <td>{cliente.direccion}</td>
+                <td>{cliente.telefono}</td>
+                <td>{cliente.email}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
