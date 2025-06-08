@@ -1,0 +1,23 @@
+.catalogo-container {
+  padding: 20px;
+}
+
+.molduras-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.moldura-card {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 10px;
+  width: 200px;
+  text-align: center;
+}
+
+.moldura-img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}

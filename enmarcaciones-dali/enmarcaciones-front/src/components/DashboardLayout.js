@@ -5,6 +5,7 @@ import ListaClientes from './ListaClientes';
 import PedidoForm from './PedidoForm';
 import ListaPedidos from './ListaPedidos';
 
+
 function DashboardLayout() {
   const [activeView, setActiveView] = useState('clientes');
 
@@ -28,6 +29,7 @@ function DashboardLayout() {
             <ListaPedidos />
           </>
         );
+      
       default:
         return <p>Selecciona una opción del menú</p>;
     }
@@ -43,18 +45,18 @@ function DashboardLayout() {
         </div>
         <div className="dashboard_sidebar_menus">
           <ul className="dashboard_menu_list">
-            <li className={activeView === 'pedidos' ? 'menuActive' : ''}>
-              <a href="#" onClick={(e) => { e.preventDefault(); setActiveView('pedidos'); }}>
-                <i className="fa-solid fa-person-chalkboard"></i>
-                <span className="menuText">Gestionar Pedidos</span>
-              </a>
-            </li>
-            <li className={activeView === 'clientes' ? 'menuActive' : ''}>
-              <a href="#" onClick={(e) => { e.preventDefault(); setActiveView('clientes'); }}>
-                <i className="fa-solid fa-address-book"></i>
-                <span className="menuText">Clientes</span>
-              </a>
-            </li>
+           <li className={activeView === 'clientes' ? 'menuActive' : ''}>
+                <a href="#" onClick={(e) => { e.preventDefault(); setActiveView('clientes'); }}>
+                  <i className="fa-solid fa-address-book"></i>
+                  <span className="menuText">Clientes</span>
+                </a>
+              </li>
+              <li className={activeView === 'pedidos' ? 'menuActive' : ''}>
+                <a href="#" onClick={(e) => { e.preventDefault(); setActiveView('pedidos'); }}>
+                  <i className="fa-solid fa-person-chalkboard"></i>
+                  <span className="menuText">Gestionar Pedidos</span>
+                </a>
+              </li>
           </ul>
         </div>
       </div>

@@ -50,3 +50,44 @@ exports.crearPedido = async (req, res) => {
     res.status(500).json({ error: 'Error al crear pedido' });
   }
 };
+
+//ACTUALIZAR PEDIDOS
+exports.actualizarEstadoPedido = async (req, res) => {
+  const pedidoId = req.params.id;
+  const nuevoEstado = req.body.estado;
+
+  try {
+    const pedido = await Pedido.findByPk(pedidoId);
+    if (!pedido) {
+      return res.status(404).json({ error: 'Pedido no encontrado' });
+    }
+
+    pedido.estado = nuevoEstado;
+    await pedido.save();
+
+    res.json({ mensaje: 'Estado actualizado correctamente', pedido });
+  } catch (error) {
+    console.error('Error al actualizar estado del pedido:', error);
+    res.status(500).json({ error: 'Error al actualizar estado del pedido' });
+  }
+};
+
+exports.actualizarEstado = async (req, res) => {
+  const { id } = req.params;
+  const { estado } = req.body;
+
+  try {
+    const pedido = await Pedido.findByPk(id);
+    if (!pedido) {
+      return res.status(404).json({ error: 'Pedido no encontrado' });
+    }
+
+    pedido.estado = estado;
+    await pedido.save();
+
+    res.json({ mensaje: 'Estado actualizado', pedido });
+  } catch (error) {
+    console.error('❌ Error al actualizar estado:', error);
+    res.status(500).json({ error: 'Error interno al actualizar estado' });
+  }
+};

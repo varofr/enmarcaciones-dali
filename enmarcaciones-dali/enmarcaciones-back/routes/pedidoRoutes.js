@@ -6,4 +6,7 @@ router.get('/', pedidoController.mostrarPedidos);
 
 router.post('/', pedidoController.crearPedido);
 
+router.put('/:id/estado', pedidoController.actualizarEstadoPedido);
+
+
 module.exports = router;

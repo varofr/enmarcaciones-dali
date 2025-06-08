@@ -20,7 +20,7 @@ function ListaClientes() {
 
   return (
     <div>
-      <h2>Clientes Registrados</h2>
+      
       <table border="1" cellPadding="5">
         <thead>
           <tr>

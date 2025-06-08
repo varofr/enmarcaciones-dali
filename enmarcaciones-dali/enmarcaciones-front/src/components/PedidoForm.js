@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import '../css/PedidoForm.css';
 
-// Catálogo local de molduras con su precio por metro lineal
+
 const molduras = [
-  { tipo: 'Roble', precio: 1200 },
-  { tipo: 'Nogal', precio: 1400 },
-  { tipo: 'Negra Lacada', precio: 1500 },
-  { tipo: 'Blanca Lisa', precio: 1300 }
+  { tipo: 'Dorada', precio: 1200, imagen: '/Images/Molduras/dorada.jpg' },
+  { tipo: 'Negra', precio: 1400, imagen: '/Images/Molduras/negra.jpg' },
+  { tipo: 'Greca', precio: 1500, imagen: '/Images/Molduras/greca.jpg' },
+  { tipo: 'Plateada', precio: 1300, imagen: '/Images/Molduras/plateada.jpg' }
 ];
 
 function PedidoForm() {
@@ -18,39 +19,26 @@ function PedidoForm() {
     precio_total: 0
   });
 
-  // Carga clientes desde el backend
   useEffect(() => {
     fetch('http://localhost:5000/api/clientes')
       .then(res => res.json())
       .then(data => {
-        if (Array.isArray(data)) {
-          setClientes(data);
-        } else if (Array.isArray(data.data)) {
-          setClientes(data.data); 
-        } else {
-          console.error('Respuesta inesperada:', data);
-        }
+        if (Array.isArray(data)) setClientes(data);
+        else if (Array.isArray(data.data)) setClientes(data.data);
       })
       .catch(err => console.error('Error al cargar clientes:', err));
   }, []);
 
-  // Calcula precio automático
   const calcularPrecio = (alto, ancho, tipo_moldura) => {
-  const moldura = molduras.find((m) => m.tipo === tipo_moldura);
-  if (!moldura) return 0;
+    const moldura = molduras.find((m) => m.tipo === tipo_moldura);
+    if (!moldura) return 0;
+    const perimetroCM = 2 * (parseFloat(alto || 0) + parseFloat(ancho || 0));
+    const perimetroM = perimetroCM / 100;
+    const precioMoldura = perimetroM * moldura.precio;
+    const costoFijo = 2000;
+    return Math.round(precioMoldura + costoFijo);
+  };
 
-  const perimetroCM = 2 * (parseFloat(alto || 0) + parseFloat(ancho || 0));
-  const perimetroM = perimetroCM / 100;
-
-  const precioMoldura = perimetroM * moldura.precio;
-  const costoFijo = 2000; // por corte, ensamblado, etc.
-
-  return Math.round(precioMoldura + costoFijo);
-};
-
-
-
-  // Maneja los cambios en el formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
     const updatedForm = { ...formData, [name]: value };
@@ -64,7 +52,16 @@ function PedidoForm() {
     setFormData(updatedForm);
   };
 
-  // Envía el pedido al backend
+  const handleMolduraClick = (tipo) => {
+    const updatedForm = { ...formData, tipo_moldura: tipo };
+    updatedForm.precio_total = calcularPrecio(
+      updatedForm.alto,
+      updatedForm.ancho,
+      tipo
+    );
+    setFormData(updatedForm);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -86,7 +83,7 @@ function PedidoForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="pedido-form">
       <select name="cliente_id" onChange={handleChange} required>
         <option value="">Seleccione un cliente</option>
         {clientes.map(cliente => (
@@ -99,14 +96,20 @@ function PedidoForm() {
       <input name="alto" type="number" placeholder="Alto (cm)" onChange={handleChange} required />
       <input name="ancho" type="number" placeholder="Ancho (cm)" onChange={handleChange} required />
 
-      <select name="tipo_moldura" onChange={handleChange} required>
-        <option value="">Seleccione una moldura</option>
+      <div className="molduras-grid">
         {molduras.map((m) => (
-          <option key={m.tipo} value={m.tipo}>{m.tipo}</option>
+          <div
+            key={m.tipo}
+            className={`moldura-card ${formData.tipo_moldura === m.tipo ? 'selected' : ''}`}
+            onClick={() => handleMolduraClick(m.tipo)}
+          >
+            <img src={m.imagen} alt={m.tipo} className="moldura-img" />
+            <p>{m.tipo}</p>
+          </div>
         ))}
-      </select>
+      </div>
 
-      <p>Precio estimado: ${formData.precio_total.toFixed(0)}</p>
+      <p className="precio-total">Precio estimado: ${formData.precio_total.toLocaleString()}</p>
       <button type="submit">Registrar Pedido</button>
     </form>
   );
