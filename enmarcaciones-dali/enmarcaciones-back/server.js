@@ -18,6 +18,17 @@ app.use('/api/pedidos', pedidoRoutes);
 const inventarioRoutes = require('./routes/inventarioRoutes');
 app.use('/api/inventario', inventarioRoutes);
 
+const flujoCajaRoutes = require('./routes/flujoCajaRoutes');
+app.use('/api/flujo-caja', flujoCajaRoutes);
+
+const facturaRoutes = require('./routes/facturaRoutes');
+app.use('/api/facturas', facturaRoutes);
+
+
+
+/*const authRoutes = require('./routes/authRoutes');
+app.use('/api/auth', authRoutes);*/
+
 
 // Conexión con Sequelize
 const { sequelize } = require('./models');

@@ -1,49 +1,38 @@
-const { Pedido, Cliente } = require('../models');
+const { Pedido, Cliente, Factura } = require('../models');
 
-// Mostrar todos los pedidos
+// ✅ GET /api/pedidos - lista todos los pedidos con Cliente y Factura
 exports.mostrarPedidos = async (req, res) => {
   try {
     const pedidos = await Pedido.findAll({
-      include: {
-        model: Cliente,
-        as: 'Cliente',
-        attributes: ['nombre']
-      }
+      include: [
+        {
+          model: Cliente,
+          as: 'Cliente',
+          attributes: ['nombre', 'rut']
+        },
+        {
+          model: Factura,
+          as: 'Factura'
+        }
+      ]
     });
-
-    const pedidosFormateados = pedidos.map(p => ({
-      id: p.id,
-      alto: p.alto,
-      ancho: p.ancho,
-      tipo_moldura: p.tipo_moldura,
-      precio_total: p.precio_total,
-      fecha: p.fecha,
-      estado: p.estado,
-      cliente: p.Cliente ? p.Cliente.nombre : 'Desconocido'
-    }));
-
-    res.json(pedidosFormateados);
+    res.json(pedidos);
   } catch (error) {
     console.error('Error al obtener pedidos:', error);
     res.status(500).json({ error: 'Error al obtener pedidos' });
   }
 };
 
-// Crear un nuevo pedido
+// ✅ POST /api/pedidos - crea un nuevo pedido
 exports.crearPedido = async (req, res) => {
-  console.log('📥 Datos recibidos:', req.body);
-
   try {
-    const nuevoPedido = await Pedido.create({
-      cliente_id: req.body.cliente_id,
-      alto: req.body.alto,
-      ancho: req.body.ancho,
-      tipo_moldura: req.body.tipo_moldura,
-      precio_total: req.body.precio_total,
-      fecha: new Date(),
-      estado: 'pendiente'
-    });
+    const datos = {
+      ...req.body,
+      fecha: req.body.fecha || new Date(), 
+      estado: req.body.estado || 'pendiente' 
+    };
 
+    const nuevoPedido = await Pedido.create(datos);
     res.status(201).json(nuevoPedido);
   } catch (error) {
     console.error('Error al crear pedido:', error);
@@ -51,32 +40,13 @@ exports.crearPedido = async (req, res) => {
   }
 };
 
-//ACTUALIZAR PEDIDOS
-exports.actualizarEstadoPedido = async (req, res) => {
-  const pedidoId = req.params.id;
-  const nuevoEstado = req.body.estado;
 
-  try {
-    const pedido = await Pedido.findByPk(pedidoId);
-    if (!pedido) {
-      return res.status(404).json({ error: 'Pedido no encontrado' });
-    }
-
-    pedido.estado = nuevoEstado;
-    await pedido.save();
-
-    res.json({ mensaje: 'Estado actualizado correctamente', pedido });
-  } catch (error) {
-    console.error('Error al actualizar estado del pedido:', error);
-    res.status(500).json({ error: 'Error al actualizar estado del pedido' });
-  }
-};
-
+// ✅ PUT /api/pedidos/:id/estado - actualiza el estado de un pedido
 exports.actualizarEstado = async (req, res) => {
-  const { id } = req.params;
-  const { estado } = req.body;
-
   try {
+    const { id } = req.params;
+    const { estado } = req.body;
+
     const pedido = await Pedido.findByPk(id);
     if (!pedido) {
       return res.status(404).json({ error: 'Pedido no encontrado' });
@@ -84,10 +54,27 @@ exports.actualizarEstado = async (req, res) => {
 
     pedido.estado = estado;
     await pedido.save();
-
-    res.json({ mensaje: 'Estado actualizado', pedido });
+    res.json(pedido);
   } catch (error) {
-    console.error('❌ Error al actualizar estado:', error);
-    res.status(500).json({ error: 'Error interno al actualizar estado' });
+    console.error('Error al actualizar estado del pedido:', error);
+    res.status(500).json({ error: 'Error al actualizar estado del pedido' });
+  }
+};
+
+// ✅ GET /api/pedidos/pendientes - lista solo los pedidos en estado pendiente
+exports.listarPendientes = async (req, res) => {
+  try {
+    const pedidos = await Pedido.findAll({
+      where: { estado: 'pendiente' },
+      include: {
+        model: Cliente,
+        as: 'Cliente',
+        attributes: ['nombre', 'rut']
+      }
+    });
+    res.json(pedidos);
+  } catch (error) {
+    console.error('Error al obtener pedidos pendientes:', error);
+    res.status(500).json({ error: 'Error al obtener pedidos pendientes' });
   }
 };

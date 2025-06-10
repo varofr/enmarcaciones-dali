@@ -37,6 +37,8 @@ function ListaPedidos() {
         return '#ff9800';
       case 'entregado':
         return '#4caf50';
+      case 'facturado':
+        return '#999';
       default:
         return '#ccc';
     }
@@ -48,8 +50,8 @@ function ListaPedidos() {
     const nuevaDireccion = esMismoCampo ? !ordenAscendente : true;
 
     const pedidosOrdenados = [...pedidos].sort((a, b) => {
-      const aVal = a[campo]?.toString().toLowerCase();
-      const bVal = b[campo]?.toString().toLowerCase();
+      const aVal = (campo === 'cliente') ? a.Cliente?.nombre?.toLowerCase() : a[campo]?.toString().toLowerCase();
+      const bVal = (campo === 'cliente') ? b.Cliente?.nombre?.toLowerCase() : b[campo]?.toString().toLowerCase();
 
       if (aVal < bVal) return nuevaDireccion ? -1 : 1;
       if (aVal > bVal) return nuevaDireccion ? 1 : -1;
@@ -106,7 +108,7 @@ function ListaPedidos() {
           <tbody>
             {pedidos.map(pedido => (
               <tr key={pedido.id}>
-                <td>{pedido.cliente}</td>
+                <td>{pedido.Cliente?.nombre || 'Sin cliente'}</td>
                 <td>{pedido.alto} x {pedido.ancho} cm</td>
                 <td>{pedido.tipo_moldura}</td>
                 <td>${Number(pedido.precio_total).toLocaleString('es-CL', { maximumFractionDigits: 0 })}</td>

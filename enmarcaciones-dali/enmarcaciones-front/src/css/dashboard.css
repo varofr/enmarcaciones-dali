@@ -29,15 +29,25 @@ img {
 #dashboardMainContainer {
   display: flex;
   flex-direction: row;
+  height: 100vh;
+  overflow: hidden;
 }
 .dashboard_sidebar {
   width: 20%;
   background: #323232;
   height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+  padding-bottom: 20px;
 }
 .dashboard_content_container {
   width: 80%;
+  margin-left: 20%;
   background: #f4f6f9;
+  overflow-y: auto;
+  height: 100vh;
 }
 .dashboard_logo {
   color: #af9659;
@@ -191,4 +201,20 @@ img {
 .tabla th.acciones-columna,
 .tabla td.acciones-columna {
   min-width: 200px;
+}
+
+.dashboard_sidebar_user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+#userImage {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ffd700;
+  margin-bottom: 0.5rem;
 }

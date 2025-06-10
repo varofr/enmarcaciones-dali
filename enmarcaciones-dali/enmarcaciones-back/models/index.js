@@ -23,7 +23,8 @@ fs
       file.indexOf('.') !== 0 &&
       file !== basename &&
       file.slice(-3) === '.js' &&
-      file.indexOf('.test.js') === -1
+      file.indexOf('.test.js') === -1 &&
+      file !== 'usuario.js' // 👈 asegúrate de que este modelo no sea procesado si está presente
     );
   })
   .forEach(file => {
@@ -31,7 +32,6 @@ fs
     db[model.name] = model;
   });
 
-// Ejecutar asociaciones si están definidas
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);

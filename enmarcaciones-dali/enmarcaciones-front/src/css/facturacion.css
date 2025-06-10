@@ -1,0 +1,79 @@
+/* Contenedor general */
+.factura-contenedor {
+  padding: 1.5rem;
+  background-color: #1e1e2f;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+/* Tablas reutilizando la base del estilo de inventario */
+.tabla-factura {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #1c1c2e;
+  color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.tabla-factura th,
+.tabla-factura td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.tabla-factura thead {
+  background-color: #2f2f44;
+}
+
+.tabla-factura tbody tr:nth-child(even) {
+  background-color: #2a2a3c;
+}
+
+.tabla-factura tbody tr:hover {
+  background-color: #33334d;
+}
+
+/* Select de métodos de pago */
+.tabla-factura select {
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #2e2e42;
+  color: #fff;
+}
+
+.tabla-factura select:disabled {
+  background-color: #444;
+  color: #aaa;
+}
+
+/* Botones de acción */
+.tabla-factura button {
+  background-color: #ffd700;
+  color: #000;
+  font-weight: bold;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.tabla-factura button:hover {
+  background-color: #e5c100;
+}
+
+.tabla-factura button:disabled {
+  background-color: #777;
+  color: #ddd;
+  cursor: not-allowed;
+}
+
+/* Sección de título adicional */
+.factura-contenedor h2 {
+  color: #ffd700;
+  margin-bottom: 1rem;
+}

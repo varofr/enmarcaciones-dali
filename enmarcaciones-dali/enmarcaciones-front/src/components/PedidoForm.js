@@ -1,16 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../css/PedidoForm.css';
 
-const molduras = [
-  { tipo: 'Dorada', precio: 1200, imagen: '/Images/Molduras/dorada.jpg' },
-  { tipo: 'Negra', precio: 1400, imagen: '/Images/Molduras/negra.jpg' },
-  { tipo: 'Greca', precio: 1500, imagen: '/Images/Molduras/greca.jpg' },
-  { tipo: 'Plateada', precio: 1300, imagen: '/Images/Molduras/plateada.jpg' }
-];
-
-function PedidoForm({ onPedidoCreado }) {
-  const [clientes, setClientes] = useState([]);
-  const [formData, setFormData] = useState({
+function PedidoForm({ onSubmit, clientes }) {
+  const [pedido, setPedido] = useState({
     cliente_id: '',
     alto: '',
     ancho: '',
@@ -18,112 +10,99 @@ function PedidoForm({ onPedidoCreado }) {
     precio_total: 0
   });
 
-  useEffect(() => {
-    fetch('http://localhost:5000/api/clientes')
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) setClientes(data);
-        else if (Array.isArray(data.data)) setClientes(data.data);
-      })
-      .catch(err => console.error('Error al cargar clientes:', err));
-  }, []);
+  const molduras = [
+    { tipo: 'dorada', imagen: '/Images/Molduras/dorada.jpg', precio: 95 },
+    { tipo: 'negra', imagen: '/Images/Molduras/negra.jpg', precio: 72 },
+    { tipo: 'greca', imagen: '/Images/Molduras/greca.jpg', precio: 110 },
+    { tipo: 'plateada', imagen: '/Images/Molduras/plateada.jpg', precio: 85 },
+    // Puedes agregar más molduras aquí
+  ];
 
-  const calcularPrecio = (alto, ancho, tipo_moldura) => {
-    const moldura = molduras.find((m) => m.tipo === tipo_moldura);
-    if (!moldura) return 0;
-    const perimetroCM = 2 * (parseFloat(alto || 0) + parseFloat(ancho || 0));
-    const perimetroM = perimetroCM / 100;
-    const precioMoldura = perimetroM * moldura.precio;
-    const costoFijo = 2000;
-    return Math.round(precioMoldura + costoFijo);
+  const calcularPrecio = (alto, ancho, tipoMoldura) => {
+    const altoCm = parseFloat(alto || 0);
+    const anchoCm = parseFloat(ancho || 0);
+    const moldura = molduras.find(m => m.tipo === tipoMoldura);
+    const precioUnitario = moldura ? moldura.precio : 72;
+    return Math.round((altoCm + anchoCm) * precioUnitario);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const updatedForm = { ...formData, [name]: value };
 
-    if (name === 'alto' || name === 'ancho' || name === 'tipo_moldura') {
-      updatedForm.precio_total = calcularPrecio(
-        updatedForm.alto,
-        updatedForm.ancho,
-        updatedForm.tipo_moldura
-      );
-    }
+    let alto = pedido.alto;
+    let ancho = pedido.ancho;
+    let tipo = pedido.tipo_moldura;
 
-    setFormData(updatedForm);
+    if (name === 'alto') alto = value;
+    if (name === 'ancho') ancho = value;
+
+    const nuevoPedido = {
+      ...pedido,
+      [name]: value,
+      precio_total: calcularPrecio(alto, ancho, tipo)
+    };
+
+    setPedido(nuevoPedido);
   };
 
   const handleMolduraClick = (tipo) => {
-    const updatedForm = { ...formData, tipo_moldura: tipo };
-    updatedForm.precio_total = calcularPrecio(
-      updatedForm.alto,
-      updatedForm.ancho,
-      tipo
-    );
-    setFormData(updatedForm);
+    const { alto, ancho } = pedido;
+    setPedido({
+      ...pedido,
+      tipo_moldura: tipo,
+      precio_total: calcularPrecio(alto, ancho, tipo)
+    });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const res = await fetch('http://localhost:5000/api/pedidos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-      const result = await res.json();
-      if (res.ok) {
-        alert('Pedido registrado con éxito');
-        if (typeof onPedidoCreado === 'function') onPedidoCreado();
-        setFormData({
-          cliente_id: '',
-          alto: '',
-          ancho: '',
-          tipo_moldura: '',
-          precio_total: 0
-        });
-      } else {
-        alert('Error al registrar pedido: ' + result.error);
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Error al registrar pedido');
+
+    if (!pedido.cliente_id) return alert('Debe seleccionar un cliente.');
+    if (!pedido.tipo_moldura) return alert('Debe seleccionar una moldura.');
+    if (!pedido.alto || !pedido.ancho || isNaN(pedido.alto) || isNaN(pedido.ancho)) {
+      return alert('Debe ingresar alto y ancho válidos.');
     }
+
+    onSubmit(pedido);
+    setPedido({
+      cliente_id: '',
+      alto: '',
+      ancho: '',
+      tipo_moldura: '',
+      precio_total: 0
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="pedido-form">
-      <select name="cliente_id" value={formData.cliente_id} onChange={handleChange} required>
-        <option value="">Seleccione un cliente</option>
-        {clientes.map(cliente => (
-          <option key={cliente.id} value={cliente.id}>
-            {cliente.nombre} ({cliente.rut})
-          </option>
-        ))}
-      </select>
-
-      <input
-        name="alto"
-        type="number"
-        placeholder="Alto (cm)"
-        value={formData.alto}
-        onChange={handleChange}
-        required
-      />
-      <input
-        name="ancho"
-        type="number"
-        placeholder="Ancho (cm)"
-        value={formData.ancho}
-        onChange={handleChange}
-        required
-      />
+    <>
+      <form className="inventario-form" onSubmit={handleSubmit}>
+        <select name="cliente_id" value={pedido.cliente_id} onChange={handleChange} required>
+          <option value="">Seleccione un cliente</option>
+          {clientes.map(c => (
+            <option key={c.id} value={c.id}>{c.nombre}</option>
+          ))}
+        </select>
+        <input
+          name="alto"
+          placeholder="Alto (cm)"
+          value={pedido.alto}
+          onChange={handleChange}
+        />
+        <input
+          name="ancho"
+          placeholder="Ancho (cm)"
+          value={pedido.ancho}
+          onChange={handleChange}
+        />
+        <input className="precio-total" disabled value={`$${pedido.precio_total}`} />
+        <button type="submit">Registrar Pedido</button>
+      </form>
 
       <div className="molduras-grid">
         {molduras.map((m) => (
           <div
             key={m.tipo}
-            className={`moldura-card ${formData.tipo_moldura === m.tipo ? 'selected' : ''}`}
+            className={`moldura-card ${pedido.tipo_moldura === m.tipo ? 'selected' : ''}`}
             onClick={() => handleMolduraClick(m.tipo)}
           >
             <img src={m.imagen} alt={m.tipo} className="moldura-img" />
@@ -131,10 +110,7 @@ function PedidoForm({ onPedidoCreado }) {
           </div>
         ))}
       </div>
-
-      <p className="precio-total">Precio estimado: ${formData.precio_total.toLocaleString()}</p>
-      <button type="submit">Registrar Pedido</button>
-    </form>
+    </>
   );
 }
 

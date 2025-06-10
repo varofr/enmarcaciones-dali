@@ -1,0 +1,31 @@
+.estadistica-container {
+  padding: 20px;
+}
+
+.tabla-estadistica {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #1c1c2e;
+  color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.tabla-estadistica th,
+.tabla-estadistica td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.tabla-estadistica thead {
+  background-color: #2f2f44;
+}
+
+.tabla-estadistica tbody tr:nth-child(even) {
+  background-color: #2a2a3c;
+}
+
+.tabla-estadistica tbody tr:hover {
+  background-color: #33334d;
+}

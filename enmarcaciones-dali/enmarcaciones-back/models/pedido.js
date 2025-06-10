@@ -7,17 +7,44 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'cliente_id',
         as: 'Cliente'
       });
+
+      Pedido.hasOne(models.Factura, {
+        foreignKey: 'pedido_id',
+        as: 'Factura'
+      });
     }
   }
 
   Pedido.init({
-    cliente_id: DataTypes.INTEGER,
-    alto: DataTypes.DECIMAL(5, 2),
-    ancho: DataTypes.DECIMAL(5, 2),
-    tipo_moldura: DataTypes.STRING,
-    precio_total: DataTypes.DECIMAL(10, 2),
-    fecha: DataTypes.DATE,
-    estado: DataTypes.STRING
+    cliente_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    alto: {
+      type: DataTypes.DECIMAL(5, 2),
+      allowNull: false
+    },
+    ancho: {
+      type: DataTypes.DECIMAL(5, 2),
+      allowNull: false
+    },
+    tipo_moldura: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    precio_total: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false
+    },
+    fecha: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    estado: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'pendiente'
+    }
   }, {
     sequelize,
     modelName: 'Pedido',

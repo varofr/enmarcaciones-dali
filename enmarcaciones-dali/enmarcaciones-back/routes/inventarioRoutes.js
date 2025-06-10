@@ -6,5 +6,6 @@ router.get('/', inventarioController.listarInventario);
 router.post('/', inventarioController.crearItem);
 router.put('/:id', inventarioController.actualizarItem);
 router.delete('/:id', inventarioController.eliminarItem);
+router.get('/estadisticas', inventarioController.estadisticas);
 
 module.exports = router;
