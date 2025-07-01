@@ -6,7 +6,7 @@ function ListaPedidos() {
   const [ordenCampo, setOrdenCampo] = useState('');
   const [ordenAscendente, setOrdenAscendente] = useState(true);
 
-  // 🔄 Cargar pedidos desde el backend
+  // Cargar pedidos desde el backend
   const cargarPedidos = () => {
     fetch('http://localhost:5000/api/pedidos')
       .then(res => res.json())
@@ -22,11 +22,11 @@ function ListaPedidos() {
     cargarPedidos();
   }, []);
 
-  // ✅ Formatear el texto del estado (primera letra mayúscula)
+  // Formatear el texto del estado (primera letra mayúscula)
   const formatearEstado = (estado) =>
     estado ? estado.charAt(0).toUpperCase() + estado.slice(1) : '';
 
-  // 🎨 Color por tipo de estado
+  // Color por tipo de estado
   const colorEstado = (estado) => {
     switch (estado) {
       case 'pendiente':
@@ -44,7 +44,7 @@ function ListaPedidos() {
     }
   };
 
-  // 🔁 Ordenamiento por campo
+  // Ordenamiento por campo
   const ordenarPedidos = (campo) => {
     const esMismoCampo = ordenCampo === campo;
     const nuevaDireccion = esMismoCampo ? !ordenAscendente : true;
@@ -63,7 +63,7 @@ function ListaPedidos() {
     setOrdenAscendente(nuevaDireccion);
   };
 
-  // 🔄 PUT para actualizar estado del pedido
+  // PUT para actualizar estado del pedido
   const actualizarEstado = async (id, nuevoEstado) => {
     try {
       const res = await fetch(`http://localhost:5000/api/pedidos/${id}/estado`, {
