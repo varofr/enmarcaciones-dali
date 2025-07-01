@@ -152,7 +152,17 @@ function DashboardLayout() {
       <div className="dashboard_content_container" id="dashboard_content_container">
         <div className="dashboard_topNav">
           <a href="#" id="toggleBtn"><i className="fa fa-navicon"></i></a>
-          <a href="#" className="logoutBtn"><i className="fa fa-power-off"></i> Log-out</a>
+         <a   //BOTÓN LOGOUT
+  href="#"
+  className="logoutBtn"
+  onClick={() => {
+    localStorage.removeItem('authenticated');
+    window.location.href = '/';
+  }}
+>
+  <i className="fa fa-power-off"></i> Log-out
+</a>
+
         </div>
         <div className="dashboard_content">
           <div className="dashboard_content_main">
